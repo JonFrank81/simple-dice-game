@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,16 +11,18 @@ namespace Albins_uppgift_alternativ
 {
     class spelaren
     {
-        // Kod som skapar ett randomiserat värde.
+        //kod som skapar ett randomiserat värde.
         public static readonly Random getrandom = new Random();
         public int RandomNumberSpelaren()
         {
-            lock (getrandom) 
+            lock (getrandom)
             {
                 return getrandom.Next(1, 6);
             }
-            
+
         }
+
+
         public spelaren(string name) 
         {   
             Console.WriteLine("-------------------------------------------");
@@ -34,7 +37,7 @@ namespace Albins_uppgift_alternativ
         public static readonly Random getrandomDatorn = new Random();
         public int RandomNumberDatorn()
         {
-            lock (getrandomDatorn) // synchronize
+            lock (getrandomDatorn) 
             {
                 return getrandomDatorn.Next(1, 6);
             }
@@ -54,6 +57,7 @@ namespace Albins_uppgift_alternativ
         {
             // Variabel som används för att avgöra om det är första gången man spelar
             int repeat = 0;
+            bool FirstGame;
             // Hur mycket pengar man har på bordet
             int kapital = 0;
             // Total vinst
@@ -67,12 +71,13 @@ namespace Albins_uppgift_alternativ
                 string choice = Console.ReadLine();
 
                // Om Y eller y, kör koden, annars avsluta.
-                if (choice=="Y"|choice=="y")
+                if (choice.Equals("Y",StringComparison.InvariantCultureIgnoreCase))
                 {
                 repeat++;
                     // Låter spelaren lägga pengar på bordet om det är första spelet eller pengarna är slut
-                    if (repeat == 1|kapital==0)
+                    if (FirstGame=true | kapital==0)
                     {
+                        FirstGame=false;
                         Console.WriteLine("Hur mycket pengar vill du lägga på bordet? (maxinsats 5000 kr)");
                         string userinput = Console.ReadLine();
                         int saldo = Convert.ToInt32(userinput);
@@ -102,20 +107,21 @@ namespace Albins_uppgift_alternativ
                     }
 
                 //Variabler som används i whileloopen
-                int i = 0;
-                int j = 0;
-                int o = 0;
+                int WinHuman = 0;
+                int WinComputer = 0;
+                int Run = 0;
+                int RunsVictory = 2;
 
                 //While loop som kör själva spelet (max tre omgångar)
-                while (i < 2 && j < 2)
+                while (WinHuman < RunsVictory && WinComputer < RunsVictory)
                 {
-                    o++;
+                    Run++;
                     Console.WriteLine("--------------------------------------");
-                    Console.WriteLine("Omgång: {0}", o);
+                    Console.WriteLine("Omgång: {0}", Run);
                     Console.WriteLine("--------------------------------------");
 
                     Console.WriteLine("--------------------------------------");
-                    Console.WriteLine("Ställning: Människa vs Dator: {0}-{1}", i, j);
+                    Console.WriteLine("Ställning: Människa vs Dator: {0}-{1}", WinHuman, WinComputer);
                     Console.WriteLine("--------------------------------------");
 
                     // Spelaren
@@ -139,7 +145,7 @@ namespace Albins_uppgift_alternativ
                     // Bestämmer vem som har vunnit
                     if (summanS > summanD)
                     {
-                        i++;
+                        WinHuman++;
                         Console.WriteLine("-----------------------------------");
                         Console.WriteLine("Du vann!");
                         Console.WriteLine("------------------------------------");
@@ -150,7 +156,7 @@ namespace Albins_uppgift_alternativ
                     }
                     else if (summanS < summanD)
                     {
-                        j++;
+                        WinComputer++;
                         Console.WriteLine("------------------------------------");
                         Console.WriteLine("Datorn vann");
                         Console.WriteLine("------------------------------------");
@@ -170,11 +176,11 @@ namespace Albins_uppgift_alternativ
                 }
                 // Skriver ut spelets slutställning 
                 Console.WriteLine("---------------------------------------------");
-                Console.WriteLine("Slutställningen blev {0}-{1}", i, j);
+                Console.WriteLine("Slutställningen blev {0}-{1}", WinHuman, WinComputer);
                 Console.WriteLine("---------------------------------------------");
 
                 // Avgör vem som har vunnit
-                if (i > j)
+                if (WinHuman > WinComputer)
                 {
                     Console.WriteLine("-----------------------------------------");
                     Console.WriteLine("Du vann - Grattis!");
